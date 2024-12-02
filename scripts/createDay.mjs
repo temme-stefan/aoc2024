@@ -3,10 +3,11 @@ import path from 'node:path';
 import {copyFile, mkdir, readFile, writeFile} from 'node:fs/promises';
 import {constants} from 'node:fs';
 import {getExample, getText} from "./getData.mjs";
+import 'dotenv/config';
 
-const url = "https://adventofcode.com/t_year/day/t_day";
-const input = `${url}/input`;
-const year = 2024;
+const url_template = "https://adventofcode.com/t_year/day/t_day";
+const inputUrl_template = `${url_template}/input`;
+const year = process.env.YEAR;
 const myArgs = process.argv.slice(2);
 let day;
 if (myArgs.length === 0) {
@@ -15,7 +16,7 @@ if (myArgs.length === 0) {
     day = parseInt(myArgs[0]);
 }
 const padLeft = (day) => (day < 10 ? "0" : "") + day;
-const firstSunday = 1;
+const firstSunday = ((7-(new Date(year,11,1)).getDay()))%7+1;
 const folderNumber = day <= firstSunday ? 0 : Math.floor((day - firstSunday-1) / 7) + 1;
 const endOfWeek = Math.min(25, folderNumber * 7 + firstSunday);
 const startOfWeek = Math.max(1, folderNumber * 7 + firstSunday - 6);
@@ -37,8 +38,8 @@ const baseReplacer = (pattern) => {
             return year;
     }
 };
-const urlOfDay = url.replace(replacer, baseReplacer);
-const inputUrl = input.replace(replacer, baseReplacer);
+const urlOfDay = url_template.replace(replacer, baseReplacer);
+const inputUrl = inputUrl_template.replace(replacer, baseReplacer);
 
 const textInput = await getText(inputUrl);
 const exampleInput = await getExample(urlOfDay);
