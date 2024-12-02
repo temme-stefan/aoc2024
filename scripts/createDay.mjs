@@ -1,6 +1,6 @@
 import process from 'node:process';
 import path from 'node:path';
-import {copyFile, readFile, writeFile, mkdir} from 'node:fs/promises';
+import {copyFile, mkdir, readFile, writeFile} from 'node:fs/promises';
 import {constants} from 'node:fs';
 import {getExample, getText} from "./getData.mjs";
 
@@ -16,7 +16,7 @@ if (myArgs.length === 0) {
 }
 const padLeft = (day) => (day < 10 ? "0" : "") + day;
 const firstSunday = 1;
-const folderNumber = Math.floor((day + firstSunday) / 7);
+const folderNumber = day <= firstSunday ? 0 : Math.floor((day - firstSunday-1) / 7) + 1;
 const endOfWeek = Math.min(25, folderNumber * 7 + firstSunday);
 const startOfWeek = Math.max(1, folderNumber * 7 + firstSunday - 6);
 
