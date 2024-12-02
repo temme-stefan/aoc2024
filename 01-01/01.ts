@@ -33,6 +33,8 @@ const solve = (data: string) => {
     console.log("similarity score", score)
 
 }
+console.log("Advent of Code - 2024 - 1")
+console.log("https://adventofcode.com/2024/day/1")
 console.time("Example");
 console.log("Example")
 solve(exampleData);
