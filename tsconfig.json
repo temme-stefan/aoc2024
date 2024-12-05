@@ -2,10 +2,10 @@
   "include": ["./**/*.ts"],
   "compilerOptions": {
     "lib": [
-      "ES2023",
+      "ES2024",
       "dom"
     ],
     "module": "commonjs",
-    "target": "ES2022"
+    "target": "ES2024"
   }
 }
