@@ -7,6 +7,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "createDay": "node scripts/createDay.mjs",
+    "showLeader": "node scripts/leaderBoard.mjs",
     "run": "ts-node"
   },
   "devDependencies": {

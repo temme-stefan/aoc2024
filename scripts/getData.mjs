@@ -2,7 +2,7 @@ import {JSDOM} from "jsdom";
 import 'dotenv/config';
 import process from "node:process";
 
-export async function getText(url) {
+async function getResponse(url){
     const token = process.env.SESSION_TOKEN;
     if (!token){
         console.error(`Could not fetch ${url}. Token Missing.`)
@@ -13,13 +13,27 @@ export async function getText(url) {
             Cookie: `session=${token}`
         }
     })
-    if (response.ok) {
+    if (!response.ok){
+        console.error(`Could not fetch ${url}. Error in response. ${response.status} - ${response.statusText}`);
+        return null
+    }
+    return response;
+}
+
+export async function getText(url) {
+    const response = await getResponse(url);
+    if (response) {
         return await response.text();
     }
-    else{
-        console.error(`Could not fetch ${url}. Error in response. ${response.status} - ${response.statusText}`);
-        return "";
+    return "";
+}
+
+export async function getJson(url){
+    const response = await getResponse(url);
+    if (response) {
+        return await response.json();
     }
+    return {};
 }
 export async function getExample(url) {
     const html = await getText(url);
