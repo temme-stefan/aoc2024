@@ -1,4 +1,9 @@
-export const exampleData=`89010123
+export const exampleData: string = `0123
+1234
+8765
+9876`;
+
+export const exampleData2=`89010123
 78121874
 87430965
 96549874

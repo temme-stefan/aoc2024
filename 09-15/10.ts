@@ -1,4 +1,4 @@
-import {exampleData, starData} from "./10-data";
+import {exampleData, exampleData2, starData} from "./10-data";
 
 type TCell = {
     i: number,
@@ -54,6 +54,10 @@ console.time("Example");
 console.log("Example")
 solve(exampleData);
 console.timeEnd("Example")
+console.time("Example2");
+console.log("Example2")
+solve(exampleData2);
+console.timeEnd("Example2")
 console.time("Stardata");
 console.log("Stardata")
 solve(starData);
