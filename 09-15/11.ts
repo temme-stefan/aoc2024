@@ -17,8 +17,7 @@ function doSingleStoneBlink(n: number) {
 
 
 const blink = (arrangement: number[], times: number) => {
-    const count = bag<number>();
-    count.incAll(arrangement);
+    const count = bag(arrangement);
     for (let i = 0; i < times; i++) {
         count.forEach((stone, stoneCount) => {
             const result = doSingleStoneBlink(stone);

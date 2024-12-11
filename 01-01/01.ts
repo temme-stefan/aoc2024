@@ -19,7 +19,7 @@ const solve = (data: string) => {
     const {left, right} = parseData(data);
     const distance = left.reduce((sum, l, i) => sum + Math.abs(l - right[i]), 0)
     console.log("total distance", distance);
-    const rightBag = bag<number>(right);
+    const rightBag = bag(right);
     const score = left.reduce((sum, l) => sum + l * (rightBag.get(l) ?? 0), 0)
 
     console.log("similarity score", score)

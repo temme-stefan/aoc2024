@@ -24,7 +24,11 @@ Object.values(memberData).forEach(({id, name, local_score, stars, completion_day
         starKeyToMemberTime.get(key).set(id, time);
     })
 });
-const starwise = [...starKeyToMemberTime.keys()].sort().map(key => {
+const starwise = [...starKeyToMemberTime.keys()].sort((a,b)=>{
+    const [a0,a1]=a.split("-")
+    const [b0,b1]=b.split("-")
+    return Math.sign(a0==b0?a1-b1:a0-b0);
+}).map(key => {
     const memberTime = starKeyToMemberTime.get(key);
     const sortedMember = [...memberTime.entries()].sort((a, b) => Math.sign(a[1] - b[1])).map(x => x[0]);
     const membersscores = Object.fromEntries([...members.values()].map(m => [m.name, memberTime.has(m.id) ? members.size - sortedMember.indexOf(m.id) : 0]));
