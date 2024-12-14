@@ -15,8 +15,8 @@ const findMinimum = (machine: ReturnType<typeof parse>[0], offset = 0) => {
     const {prize, a, b} = machine;
     const p = {x: prize.x + offset, y: prize.y + offset}
     //wolfram alpha
-    //solve l (a_x,a_y)+ m (b_x,b_y)=(p_x,p_y) for l,m
-    //l = -(b_y p_x - b_x p_y)/(a_y b_x - a_x b_y), m = -(a_x p_y - a_y p_x)/(a_y b_x - a_x b_y)
+    //solve α {a_x, a_y} + β {b_x, b_y} = {p_x, p_y} for α, β
+    //α = -(b_y p_x - b_x p_y)/(a_y b_x - a_x b_y), β = -(a_x p_y - a_y p_x)/(a_y b_x - a_x b_y)
     const nA = -(b.y * p.x - b.x * p.y)
 
     const nB = -(a.x * p.y - a.y * p.x);
@@ -42,12 +42,12 @@ const findMinimum = (machine: ReturnType<typeof parse>[0], offset = 0) => {
 }
 const solve = (data: string) => {
     const machines = parse(data);
-    const minima = machines.map(m => findMinimum(m));
-    const fewestToGetAllPossible = minima.filter(r => r.found).reduce((sum, a) => sum + a.tokens, 0);
-    console.log("Fewest Tokens", fewestToGetAllPossible, "count", minima.filter(r => r.found).length)
-    const minima2 = machines.map(m => findMinimum(m, 10000000000000));
-    const fewestToGetAllPossible2 = minima2.filter(r => r.found).reduce((sum, a) => sum + a.tokens, 0);
-    console.log("Fewest Tokens2", fewestToGetAllPossible2, "count", minima2.filter(r => r.found).length)
+    const minima = machines.map(m => findMinimum(m)).filter(r => r.found);
+    const fewestToGetAllPossible = minima.reduce((sum, a) => sum + a.tokens, 0);
+    console.log("Fewest Tokens", fewestToGetAllPossible, "count", minima.length)
+    const minima2 = machines.map(m => findMinimum(m, 10000000000000)).filter(r => r.found);
+    const fewestToGetAllPossible2 = minima2.reduce((sum, a) => sum + a.tokens, 0);
+    console.log("Fewest Tokens2", fewestToGetAllPossible2, "count", minima2.length)
 }
 console.log("Advent of Code - 2024 - 13")
 console.log("https://adventofcode.com/2024/day/13")
