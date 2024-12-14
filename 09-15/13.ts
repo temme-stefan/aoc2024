@@ -18,15 +18,17 @@ const findMinimum = (machine: ReturnType<typeof parse>[0], offset = 0) => {
     //solve l (a_x,a_y)+ m (b_x,b_y)=(p_x,p_y) for l,m
     //l = -(b_y p_x - b_x p_y)/(a_y b_x - a_x b_y), m = -(a_x p_y - a_y p_x)/(a_y b_x - a_x b_y)
     const nA = -(b.y * p.x - b.x * p.y)
-    const dA = a.y * b.x - a.x * b.y;
 
     const nB = -(a.x * p.y - a.y * p.x);
-    const dB = a.y * b.x - a.x * b.y;
-
-    if (nA % dA == 0 && nB % dB == 0) {
+    const d = a.y * b.x - a.x * b.y;
+    if (d==0){
+        //linear dependent a,b, not happening
+        console.log("linear dependent", machine)
+    }
+    else if (nA % d == 0 && nB % d == 0) {
         //only integervalues are valid;
-        const a = nA / dA;
-        const b = nB / dB;
+        const a = nA / d;
+        const b = nB / d;
         const tokens = 3 * a + b;
         return {
             found: true,
