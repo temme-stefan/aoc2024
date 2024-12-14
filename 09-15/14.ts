@@ -71,7 +71,7 @@ const solve = (data: string, width: number, height: number) => {
     console.log("SafetyFactor", quads.reduce((a, b) => a * b));
     //after width*height every robot is back to its position (look at moveRobot)
     const candidates = []
-    for (let i = 0; i < width * height; i++) {
+    for (let i = 0; i < width * height && candidates.length==0; i++) {
         const map = countMap(getMoved(robots, i, width, height), width, height);
         const someLongPattern = map.some(r => {
             let length = 0;
