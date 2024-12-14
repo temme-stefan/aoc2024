@@ -18,11 +18,10 @@ const findMinimum = (machine: ReturnType<typeof parse>[0], offset = 0) => {
     //solve α {a_x, a_y} + β {b_x, b_y} = {p_x, p_y} for α, β
     //α = -(b_y p_x - b_x p_y)/(a_y b_x - a_x b_y), β = -(a_x p_y - a_y p_x)/(a_y b_x - a_x b_y)
     const nA = -(b.y * p.x - b.x * p.y)
-
     const nB = -(a.x * p.y - a.y * p.x);
     const d = a.y * b.x - a.x * b.y;
     if (d==0){
-        //linear dependent a,b, not happening
+        //linear dependent a,b, not happening --> single solution
         console.log("linear dependent", machine)
     }
     else if (nA % d == 0 && nB % d == 0) {
