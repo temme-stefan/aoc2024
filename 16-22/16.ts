@@ -27,56 +27,59 @@ class Path {
     pathSet = new Set<TCell>();
     pathArray: TCell[] = [];
     score = 0;
-    map:TCell[][];
+    map: TCell[][];
 
-    constructor(score: number, path: TCell[],map:TCell[][]) {
+    constructor(score: number, path: TCell[], map: TCell[][]) {
         this.pathSet = new Set(path);
         this.pathArray = [...path];
         this.score = score;
-        this.map=map;
+        this.map = map;
     }
 
-    has(cell:TCell){
+    has(cell: TCell) {
         return this.pathSet.has(cell);
     }
 
-    append(cell:TCell){
-        this.score += getScoreToNext(cell,this.pathArray.at(-1),this.pathArray.at(-2));
+    append(cell: TCell) {
+        this.score += getScoreToNext(cell, this.pathArray.at(-1), this.pathArray.at(-2));
         this.pathSet.add(cell);
         this.pathArray.push(cell);
     }
 
-    getNextCells(){
-        return getNeighbours(this.map,this.pathArray.at(-1)).filter(n=>!n.isWall && !this.has(n));
+    getNextCells() {
+        return getNeighbours(this.map, this.pathArray.at(-1)).filter(n => !n.isWall && !this.has(n));
     }
 
-    clone(){
-        return new Path(this.score,this.pathArray,this.map);
+    clone() {
+        return new Path(this.score, this.pathArray, this.map);
     }
 
 }
 
 const getBestPath = ({start, end, map}: ReturnType<typeof parse>) => {
-    const pathesInProgress = [new Path(0,[start],map)];
-    let bestPath:Path = null;
-    const visited = new Map<TCell,Map<TCell,number>>();
+    const pathesInProgress = [new Path(0, [start], map)];
+    let bestPathes: Path[] = [];
+    const visited = new Map<TCell, Map<TCell, number>>();
     while (pathesInProgress.length > 0) {
-        const bestScore = bestPath?.score ?? Number.MAX_VALUE;
+        const bestScore = bestPathes[0]?.score ?? Number.MAX_VALUE;
         const current = pathesInProgress.shift();
-        if (current.score>=bestScore){
+        if (current.score >= bestScore) {
             continue;
         }
-        current.getNextCells().forEach(c=>{
+        current.getNextCells().forEach(c => {
             const p = current.clone();
-            visited.set(current.pathArray.at(-1),visited.get(current.pathArray.at(-1))??new Map());
-            const v =    visited.get(current.pathArray.at(-1));
-            if (!v.has(c) || v.get(c)>p.score) {
-                v.set(c,p.score);
-                p.append(c);
-                if (p.score < bestScore) {
+            visited.set(current.pathArray.at(-1), visited.get(current.pathArray.at(-1)) ?? new Map());
+            const v = visited.get(current.pathArray.at(-1));
+            p.append(c);
+            if (!v.has(c) || v.get(c) >= p.score) {
+                v.set(c, p.score);
+                if (p.score <= bestScore) {
                     if (c == end) {
-                        console.log("Path found", p.score, p.pathSet.size, pathesInProgress.length)
-                        bestPath = p;
+                        // console.log("Path found", p.score, p.pathSet.size, pathesInProgress.length)
+                        if (p.score < bestScore) {
+                            bestPathes.length = 0;
+                        }
+                        bestPathes.push(p);
                     } else {
                         pathesInProgress.push(p);
                     }
@@ -84,7 +87,7 @@ const getBestPath = ({start, end, map}: ReturnType<typeof parse>) => {
             }
         })
     }
-    return bestPath;
+    return bestPathes
 }
 
 const getScoreToNext = (next: TCell, current: TCell, previous: TCell | null) => {
@@ -94,8 +97,11 @@ const getScoreToNext = (next: TCell, current: TCell, previous: TCell | null) => 
 }
 const solve = (data: string) => {
     const parsed = parse(data);
-    const bestPath = getBestPath(parsed);
-    console.log("Minimum Score", bestPath.score);
+    const bestPathes = getBestPath(parsed);
+    console.log("Minimum Score", bestPathes[0].score);
+    const bestPathesTiles = bestPathes.reduce((set, path) => new Set([...set, ...path.pathSet]), new Set());
+    console.log(parsed.map.map(row => row.map(c => c.isWall ? "#" : bestPathesTiles.has(c) ? "O" : ".").join("")).join("\n"))
+    console.log("bestPathesTiles", bestPathesTiles.size)
 }
 console.log("Advent of Code - 2024 - 16")
 console.log("https://adventofcode.com/2024/day/16")
